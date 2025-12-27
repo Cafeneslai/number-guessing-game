@@ -69,5 +69,6 @@ function resetGame() {
   document.getElementById("guessInput").value = "";
   document.getElementById("guessInput").focus();
 }
+// ...existing code...
 // เริ่มเกมเมื่อโหลดหน้า
 window.addEventListener("load", initializeGame);
