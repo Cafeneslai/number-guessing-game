@@ -159,6 +159,8 @@ function resetTimer() {
 function updateTimerDisplay() {
   const timerDisplay = document.getElementById("timerDisplay");
   const timerProgress = document.getElementById("timerProgress");
+  const timerCircle = document.querySelector(".timer-circle");
+  const card = document.querySelector(".card");
 
   // อัปเดตตัวเลข
   timerDisplay.textContent = timeLeft;
@@ -167,16 +169,56 @@ function updateTimerDisplay() {
   const offset = CIRCUMFERENCE - (timeLeft / TOTAL_TIME) * CIRCUMFERENCE;
   timerProgress.style.strokeDashoffset = offset;
 
-  // เปลี่ยนสีตามเวลาที่เหลือ
-  timerDisplay.classList.remove("warning", "danger");
-  timerProgress.classList.remove("warning", "danger");
+  // เคลียร์ class เดิม
+  timerDisplay.classList.remove("warning", "danger", "urgent", "shaking");
+  timerProgress.classList.remove("warning", "danger", "urgent");
+  timerCircle.classList.remove("pulse");
+  card.classList.remove("urgent-mode", "critical-mode");
 
+  // เปลี่ยนสีและเอฟเฟกต์ตามเวลาที่เหลือ
   if (timeLeft <= 10) {
-    timerDisplay.classList.add("danger");
+    // โหมดวิกฤต (≤10 วินาที) - สีแดง + สั่น + กระพริบ
+    timerDisplay.classList.add("danger", "shaking");
     timerProgress.classList.add("danger");
+    timerCircle.classList.add("pulse");
+    card.classList.add("critical-mode");
+    playBeep(800, 100); // เสียง beep สูง
   } else if (timeLeft <= 20) {
+    // โหมดเตือน (11-20 วินาที) - สีเหลือง
     timerDisplay.classList.add("warning");
     timerProgress.classList.add("warning");
+    timerCircle.classList.add("pulse");
+    card.classList.add("urgent-mode");
+    if (timeLeft % 2 === 0) playBeep(600, 80); // beep ทุก 2 วินาที
+  } else if (timeLeft <= 30) {
+    // โหมดกดดัน (21-30 วินาที) - สีส้ม
+    timerDisplay.classList.add("urgent");
+    timerProgress.classList.add("urgent");
+    card.classList.add("urgent-mode");
+    if (timeLeft % 5 === 0) playBeep(400, 50); // beep ทุก 5 วินาที
+  }
+}
+
+// -------------------------------
+// ฟังก์ชันสร้างเสียง beep
+// -------------------------------
+function playBeep(frequency = 440, duration = 100) {
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    oscillator.frequency.value = frequency;
+    oscillator.type = "sine";
+    gainNode.gain.value = 0.1;
+
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + duration / 1000);
+  } catch (e) {
+    // ไม่มี audio support
   }
 }
 
