@@ -19,6 +19,15 @@
             <div class="card-body">
               <h1 class="card-title text-center">เกมส์ทายตัวเลข</h1>
               <p class="text-center text-muted">ทายตัวเลขตั้งแต่ 1 ถึง 100</p>
+              <div id="timerContainer" class="text-center mb-4">
+                <div class="timer-circle">
+                  <svg class="timer-svg" viewBox="0 0 100 100">
+                    <circle class="timer-bg" cx="50" cy="50" r="45"></circle>
+                    <circle class="timer-progress" id="timerProgress" cx="50" cy="50" r="45"></circle>
+                  </svg>
+                  <div class="timer-text" id="timerDisplay">60</div>
+                </div>
+              </div>
               <div class="mb-3">
                 <label for="guessInput" class="form-label">พิมพ์ตัวเลข:</label>
                 <input
