@@ -114,3 +114,11 @@ function resetGame() {
 // เริ่มเกมอัตโนมัติเมื่อโหลดหน้าเว็บ
 // -------------------------------
 window.addEventListener("load", initializeGame);
+
+// เพิ่มการ select text เมื่อคลิก input
+document.addEventListener("DOMContentLoaded", function () {
+  const guessInput = document.getElementById("guessInput");
+  guessInput.addEventListener("focus", function () {
+    this.select();
+  });
+});
