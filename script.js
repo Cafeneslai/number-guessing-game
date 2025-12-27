@@ -115,10 +115,13 @@ function resetGame() {
 // -------------------------------
 window.addEventListener("load", initializeGame);
 
-// เพิ่มการ select text เมื่อคลิก input
+// เพิ่มการรองรับ Enter key
 document.addEventListener("DOMContentLoaded", function () {
-  const guessInput = document.getElementById("guessInput");
-  guessInput.addEventListener("focus", function () {
-    this.select();
-  });
+  document
+    .getElementById("guessInput")
+    .addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        checkGuess();
+      }
+    });
 });
